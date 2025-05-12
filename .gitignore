@@ -9,3 +9,5 @@
 /backend/!**/src/main/**/target/
 /backend/!**/src/test/**/target/
 backend/mvnw.cmd
+backend/mvnw
+backend/.mvn
