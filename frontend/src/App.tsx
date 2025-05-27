@@ -7,7 +7,7 @@ export default function App() {
       window.location.host === "localhost:5173"
         ? "http://localhost:8080"
         : window.location.origin;
-    window.open(host + "/oauth2/authorization/github", "_self");
+    window.open(host + "/oauth2/authorization/google", "_self");
   }
   function handleLogout() {
     const host =

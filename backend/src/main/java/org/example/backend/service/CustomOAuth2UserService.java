@@ -1,8 +1,8 @@
 package org.example.backend.service;
 
 import lombok.RequiredArgsConstructor;
-import org.example.backend.model.AppUser;
-import org.example.backend.repository.AppUserRepository;
+import org.example.backend.model.UserModel;
+import org.example.backend.repository.UserRepository;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.*;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -15,25 +15,27 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     
-    private final AppUserRepository appUserRepository;
+    private final UserRepository userRepository;
     
+    @Override
     public OAuth2User loadUser( OAuth2UserRequest userRequest ) throws OAuth2AuthenticationException {
         OAuth2User oAuth2User = super.loadUser( userRequest );
-        AppUser appUser = appUserRepository
+        UserModel userModel = userRepository
                 .findById( oAuth2User.getName() )
                 .orElseGet( () -> createAppUser( oAuth2User ) );
         
-        return new DefaultOAuth2User( List.of( new SimpleGrantedAuthority( appUser.role() ) ),
-                oAuth2User.getAttributes(), "id" );
+        return new DefaultOAuth2User( List.of( new SimpleGrantedAuthority( userModel.role() ) ),
+                oAuth2User.getAttributes(), "sub" );
     }
     
-    private AppUser createAppUser( OAuth2User oAuth2User ) {
-        AppUser newUser = AppUser.builder()
+    private UserModel createAppUser( OAuth2User oAuth2User ) {
+        UserModel newUser = UserModel.builder()
                 .id( oAuth2User.getName() )
-                .username( oAuth2User.getAttribute( "login" ) )
+                .username( oAuth2User.getAttribute( "given_name" ) )
                 .role( "USER" )
                 .build();
-        appUserRepository.save( newUser );
+        
+        userRepository.save( newUser );
         return newUser;
     }
     

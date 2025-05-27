@@ -1,5 +1,6 @@
 package org.example.backend.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,6 +14,9 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 @EnableWebSecurity
 public class SecurityConfig {
     
+    @Value("${app.url}")
+    private String appUrl;
+    
     @Bean
     public SecurityFilterChain securityFilterChain( HttpSecurity http ) throws Exception {
         http
@@ -24,9 +28,9 @@ public class SecurityConfig {
                 .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.ALWAYS ) )
                 .exceptionHandling( error -> error
                         .authenticationEntryPoint( new HttpStatusEntryPoint( HttpStatus.UNAUTHORIZED ) ) )
-                .logout( l -> l.logoutSuccessUrl( "http://localhost:5173" ) )
+                .logout( l -> l.logoutSuccessUrl( appUrl ) )
                 .oauth2Login( oauth -> oauth
-                        .defaultSuccessUrl( "http://localhost:5173" ) );
+                        .defaultSuccessUrl( appUrl ) );
         
         return http.build();
     }
