@@ -1,5 +1,7 @@
 package org.example.backend.recipe.model;
 
+import com.mongodb.lang.Nullable;
+
 public record RecipeIngredientModel(
         String id,
         String name,
@@ -7,6 +9,6 @@ public record RecipeIngredientModel(
         UnitEnum unit,
         NutritionValuesModel nutritionValues,
         boolean isAllergen,
-        String hint
+        @Nullable String hint
 ) {
 }

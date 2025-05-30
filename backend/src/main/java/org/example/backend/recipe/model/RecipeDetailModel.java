@@ -1,7 +1,9 @@
 package org.example.backend.recipe.model;
 
+import com.mongodb.lang.Nullable;
+
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 public record RecipeDetailModel(
         String _id,
@@ -15,7 +17,7 @@ public record RecipeDetailModel(
         int cookingTime,
         int totalTime,
         int defaultPortions,
-        Optional<List<String>> allergens,
+        @Nullable List<String> allergens,
         List<String> tags,
         String image
 ) {

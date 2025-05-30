@@ -1,6 +1,8 @@
 package org.example.backend.recipe.model;
 
-import java.util.*;
+import com.mongodb.lang.Nullable;
+
+import java.util.List;
 
 public record RecipeModel(
         String id,
@@ -8,7 +10,7 @@ public record RecipeModel(
         List<IngredientGroupModel> ingredients,
         NutritionValuesModel nutritionValues,
         int totalTime,
-        Optional<List<String>> allergens,
+        @Nullable List<String> allergens,
         List<String> tags,
         String image
 ) {

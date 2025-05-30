@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,8 +16,8 @@ class RecipeServiceTest {
     private final RecipeService recipeService = new RecipeService( mockRecipeRepository );
     
     RecipeModel testRecipe = new RecipeModel(
-            "test",
             "123",
+            "test",
             List.of( new IngredientGroupModel(
                     "testgroup",
                     List.of( new RecipeIngredientModel(
@@ -39,8 +39,8 @@ class RecipeServiceTest {
     @Test
     void getAllRecipes() {
         RecipeDetailModel testDetailRecipe = new RecipeDetailModel(
-                "test",
                 "123",
+                "test",
                 testRecipe.ingredients(),
                 List.of(),
                 testRecipe.nutritionValues(),
@@ -50,7 +50,7 @@ class RecipeServiceTest {
                 10,
                 20,
                 4,
-                Optional.empty(),
+                null,
                 List.of( "" ),
                 "image"
         );

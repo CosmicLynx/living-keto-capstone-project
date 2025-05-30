@@ -76,7 +76,9 @@ class RecipeControllerTest {
                                                     "carbs": 3,
                                                     "calories": 4,
                                                     "skaldeman": null
-                                                }
+                                                },
+                                                "isAllergen": false,
+                                                "hint": ""
                                             }
                                         ]
                                     }
