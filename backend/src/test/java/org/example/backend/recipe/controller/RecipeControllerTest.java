@@ -1,5 +1,6 @@
 package org.example.backend.recipe.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.recipe.model.*;
 import org.example.backend.recipe.repository.RecipeRepository;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ class RecipeControllerTest {
     @Autowired
     RecipeRepository recipeRepository;
     
-    RecipeDetailModel testRecipe = new RecipeDetailModel(
+    RecipeDetailModel testRecipeDetails = new RecipeDetailModel(
             "123",
             "test",
             List.of( new IngredientGroupModel(
@@ -49,53 +50,25 @@ class RecipeControllerTest {
             List.of( "" ),
             "image"
     );
+    RecipeModel testRecipe = new RecipeModel(
+            testRecipeDetails._id(),
+            testRecipeDetails.title(),
+            testRecipeDetails.ingredients(),
+            testRecipeDetails.nutritionValues(),
+            testRecipeDetails.totalTime(),
+            testRecipeDetails.allergens(),
+            testRecipeDetails.tags(),
+            testRecipeDetails.image()
+    );
+    @Autowired
+    private ObjectMapper objectMapper;
     
     @Test
     void getAllRecipes() throws Exception {
-        recipeRepository.save( testRecipe );
+        recipeRepository.save( testRecipeDetails );
         
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe" ) )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().json( """
-                        [
-                            {
-                                "id": "123",
-                                "title": "test",
-                                "ingredients": [
-                                    {
-                                        "name": "testgroup",
-                                        "ingredients": [
-                                            {
-                                                "id": "1234",
-                                                "name": "testingredient",
-                                                "amount": 1.4,
-                                                "unit": "LITER",
-                                                "nutritionValues": {
-                                                    "fat": 1,
-                                                    "protein": 2,
-                                                    "carbs": 3,
-                                                    "calories": 4,
-                                                    "skaldeman": null
-                                                },
-                                                "isAllergen": false,
-                                                "hint": ""
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "nutritionValues": {
-                                    "fat": 1,
-                                    "protein": 2,
-                                    "carbs": 3,
-                                    "calories": 4,
-                                    "skaldeman": null
-                                },
-                                "totalTime": 20,
-                                "allergens": null,
-                                "tags": [""],
-                                "image": "image"
-                            }
-                        ]
-                        """ ) );
+                .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( List.of( testRecipe ) ) ) );
     }
 }
