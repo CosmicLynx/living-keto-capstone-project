@@ -54,12 +54,10 @@ class RecipeServiceTest {
                 List.of( "" ),
                 "image"
         );
-        List<RecipeDetailModel> detailRecipes = List.of( testDetailRecipe );
         
-        Mockito.when( mockRecipeRepository.findAll() ).thenReturn( detailRecipes );
+        Mockito.when( mockRecipeRepository.findAll() ).thenReturn( List.of( testDetailRecipe ) );
         
         List<RecipeModel> result = recipeService.getAllRecipes();
-        assertEquals( 1, result.size() );
-        assertEquals( testRecipe.id(), result.getFirst().id() );
+        assertEquals( List.of( testRecipe ), result );
     }
 }
