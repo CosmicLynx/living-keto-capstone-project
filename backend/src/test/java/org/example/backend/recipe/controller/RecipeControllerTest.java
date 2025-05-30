@@ -59,8 +59,8 @@ class RecipeControllerTest {
                 .andExpect( MockMvcResultMatchers.content().json( """
                         [
                             {
-                                "title": "test",
                                 "id": "123",
+                                "title": "test",
                                 "ingredients": [
                                     {
                                         "name": "testgroup",
@@ -81,15 +81,6 @@ class RecipeControllerTest {
                                         ]
                                     }
                                 ],
-                                "steps": [
-                                    {
-                                        "name": "test",
-                                        "steps": [
-                                            "step1",
-                                            "step2"
-                                        ]
-                                    }
-                                ],
                                 "nutritionValues": {
                                     "fat": 1,
                                     "protein": 2,
@@ -97,11 +88,6 @@ class RecipeControllerTest {
                                     "calories": 4,
                                     "skaldeman": null
                                 },
-                                "createdAt": "2021-01-01T00:00:00",
-                                "updatedAt": "2021-01-01T00:00:00",
-                                "preparationTime": 20,
-                                "cookingTime": 20,
-                                "defaultPortions": 20,
                                 "totalTime": 20,
                                 "allergens": null,
                                 "tags": [""],
