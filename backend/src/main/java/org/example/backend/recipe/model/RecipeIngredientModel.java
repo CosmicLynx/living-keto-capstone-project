@@ -1,12 +1,12 @@
 package org.example.backend.recipe.model;
 
-import java.util.List;
-
-public record IngredientModel(
+public record RecipeIngredientModel(
         String id,
         String name,
-        List<UnitEnum> units,
+        double amount,
+        UnitEnum unit,
         NutritionValuesModel nutritionValues,
-        boolean isAllergen
+        boolean isAllergen,
+        String hint
 ) {
 }

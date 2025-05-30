@@ -5,7 +5,7 @@ import java.util.*;
 public record RecipeModel(
         String title,
         String id,
-        List<IngredientModel> ingredients,
+        List<IngredientGroupModel> ingredients,
         NutritionValuesModel nutritionValues,
         int totalTime,
         Optional<List<String>> allergens,
