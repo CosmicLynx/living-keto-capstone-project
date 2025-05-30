@@ -1,9 +1,11 @@
 import { CustomButton } from "../components/CustomButton.tsx";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext.ts";
+import { useNavigate } from "react-router-dom";
 
 export function Header() {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   function handleLogin() {
     const host =
@@ -34,6 +36,7 @@ export function Header() {
           ) : (
             <CustomButton label="Login" onClick={handleLogin} />
           )}
+          <CustomButton label="Rezepte" onClick={() => navigate("/recipes")} />
         </div>
       </div>
     </div>
