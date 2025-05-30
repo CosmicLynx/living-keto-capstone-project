@@ -1,24 +1,17 @@
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import type { UserModel } from "./models/UserModel.ts";
+import { Route, Routes } from "react-router-dom";
+import { UserContext } from "./contexts/UserContext.ts";
+import { LoginPage } from "./pages/LoginPage.tsx";
+import { ProtectedRoute } from "./pages/ProtectedRoute.tsx";
+import { AdminPage } from "./pages/AdminPage.tsx";
 
 export default function App() {
-  function handleLogin() {
-    const host =
-      window.location.host === "localhost:5173"
-        ? "http://localhost:8080"
-        : window.location.origin;
-    window.open(host + "/oauth2/authorization/google", "_self");
-  }
-  function handleLogout() {
-    const host =
-      window.location.host === "localhost:5173"
-        ? "http://localhost:8080"
-        : window.location.origin;
-    window.open(host + "/logout", "_self");
-  }
+  const [user, setUser] = useState<UserModel | undefined>(undefined);
 
   const loadUser = () => {
-    axios.get("/api/auth").then((response) => console.log(response.data));
+    axios.get("/api/auth").then((response) => setUser(response.data));
   };
 
   useEffect(() => {
@@ -26,9 +19,13 @@ export default function App() {
   }, []);
 
   return (
-    <>
-      <button onClick={handleLogin}>Login</button>
-      <button onClick={handleLogout}>Logout</button>
-    </>
+    <UserContext.Provider value={{ user: user, setUser: setUser }}>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route element={<ProtectedRoute authorizedRole="ADMIN" />}>
+          <Route path="/admin" element={<AdminPage />} />
+        </Route>
+      </Routes>
+    </UserContext.Provider>
   );
 }
