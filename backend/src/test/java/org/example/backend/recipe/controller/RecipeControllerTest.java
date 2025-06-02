@@ -71,4 +71,23 @@ class RecipeControllerTest {
                 .andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( List.of( testRecipe ) ) ) );
     }
+    
+    @Test
+    void getRecipeById_returnsRecipeDetails_withValidId() throws Exception {
+        recipeRepository.save( testRecipeDetails );
+        
+        mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe/" + testRecipeDetails._id() ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( testRecipeDetails ) ) );
+        
+    }
+    
+    @Test
+    void getRecipeById_returns404_withInvalidId() throws Exception {
+        recipeRepository.save( testRecipeDetails );
+        
+        mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe/1234" ) )
+                .andExpect( MockMvcResultMatchers.status().isNotFound() );
+        
+    }
 }
