@@ -30,4 +30,8 @@ public class RecipeService {
         }
         return reducedRecipes;
     }
+    
+    public Optional<RecipeDetailModel> getRecipeById( String id ) {
+        return recipeRepository.findById( id );
+    }
 }
