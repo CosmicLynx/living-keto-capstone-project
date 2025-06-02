@@ -19,7 +19,7 @@ public class RecipeController {
     }
     
     @GetMapping("/{id}")
-    public Optional<RecipeDetailModel> getRecipeById( @PathVariable String id ) {
-        return recipeService.getRecipeById( id );
+    public RecipeDetailModel getRecipeById( @PathVariable String id ) throws NoSuchElementException {
+        return recipeService.getRecipeById( id ).orElseThrow( () -> new NoSuchElementException( "no recipe with id " + id + " found" ) );
     }
 }
