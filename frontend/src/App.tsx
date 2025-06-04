@@ -8,6 +8,7 @@ import { ProtectedRoute } from "./pages/ProtectedRoute.tsx";
 import { AdminPage } from "./pages/AdminPage.tsx";
 import { RecipesPage } from "./pages/RecipesPage.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { RecipeDetailPage } from "./pages/RecipeDetailPage.tsx";
 
 export default function App() {
   const [user, setUser] = useState<UserModel | undefined>(undefined);
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/admin" element={<AdminPage />} />
           </Route>
           <Route path="/recipes" element={<RecipesPage />} />
+          <Route path="/recipe/:id" element={<RecipeDetailPage />} />
         </Routes>
       </UserContext.Provider>
     </QueryClientProvider>
