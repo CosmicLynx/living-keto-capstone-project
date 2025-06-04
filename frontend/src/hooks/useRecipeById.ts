@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import type { RecipeDetailModel } from "../models/recipe/RecipeDetailModel.ts";
 
-export const useRecipeById = (id: string) => {
+export const useRecipeById = (id: string | undefined) => {
   return useQuery({
     queryKey: ["getRecipeById", id],
     queryFn: () =>
