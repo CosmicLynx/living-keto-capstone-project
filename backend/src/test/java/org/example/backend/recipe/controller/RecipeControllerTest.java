@@ -51,7 +51,7 @@ class RecipeControllerTest {
             "image"
     );
     RecipeModel testRecipe = new RecipeModel(
-            testRecipeDetails._id(),
+            testRecipeDetails.id(),
             testRecipeDetails.title(),
             testRecipeDetails.ingredients(),
             testRecipeDetails.nutritionValues(),
@@ -76,7 +76,7 @@ class RecipeControllerTest {
     void getRecipeById_returnsRecipeDetails_withValidId() throws Exception {
         recipeRepository.save( testRecipeDetails );
         
-        mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe/" + testRecipeDetails._id() ) )
+        mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe/" + testRecipeDetails.id() ) )
                 .andExpect( MockMvcResultMatchers.status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( testRecipeDetails ) ) );
         

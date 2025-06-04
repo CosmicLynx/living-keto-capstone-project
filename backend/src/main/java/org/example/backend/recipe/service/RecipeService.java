@@ -18,7 +18,7 @@ public class RecipeService {
         List<RecipeModel> reducedRecipes = new ArrayList<>();
         for ( RecipeDetailModel recipe : foundRecipes ) {
             reducedRecipes.add( new RecipeModel(
-                    recipe._id(),
+                    recipe.id(),
                     recipe.title(),
                     recipe.ingredients(),
                     recipe.nutritionValues(),

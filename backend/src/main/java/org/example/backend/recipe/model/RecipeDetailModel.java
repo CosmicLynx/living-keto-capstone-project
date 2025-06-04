@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record RecipeDetailModel(
-        String _id,
+        String id,
         String title,
         List<IngredientGroupModel> ingredients,
         List<StepGroupModel> steps,
