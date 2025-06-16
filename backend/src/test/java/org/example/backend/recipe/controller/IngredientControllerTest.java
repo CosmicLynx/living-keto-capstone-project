@@ -1,6 +1,6 @@
 package org.example.backend.recipe.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.*;
 import org.example.backend.recipe.model.*;
 import org.example.backend.recipe.repository.IngredientRepository;
 import org.example.backend.restclient.RestTemplateConfig;
@@ -11,19 +11,24 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.*;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @Import(OAuth2TestConfig.class)
+@ActiveProfiles("test")
 class IngredientControllerTest {
     
     @Autowired
@@ -89,8 +94,23 @@ class IngredientControllerTest {
                         }
                         """, MediaType.APPLICATION_JSON ) );
         
+        MvcResult result = mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/new/egg" ) )
+                .andDo( print() )
+                .andExpect( status().isOk() )
+                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
+                .andDo( mvcResult -> System.out.println( "Response Body: " + mvcResult.getResponse().getContentAsString() ) )
+                .andReturn();
+        
+        String content = result.getResponse().getContentAsString();
+        assertNotNull( content, "Response content should not be null" );
+        assertTrue( content.contains( "foods" ), "Response should contain 'foods' key" );
+        
+        JsonNode root = objectMapper.readTree( content );
+        assertNotNull( root.get( "foods" ), "foods node should not be null" );
+        assertTrue( root.get( "foods" ).has( "food" ), "foods should have food array" );
+        
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/new/egg" ) )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( status().isOk() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.foods.food[?(@.food_id=='3092')]" ).exists() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.foods.food[?(@.food_id=='45771060')]" ).exists() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.foods.food[0].food_name" ).value( "Egg" ) )
@@ -169,7 +189,7 @@ class IngredientControllerTest {
                         """, MediaType.APPLICATION_JSON ) );
         
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/new/id?id=3092" ) )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( status().isOk() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.food.food_id" ).value( "3092" ) )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.food.food_name" ).value( "Egg" ) )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.food.servings.serving[?(@.serving_id=='11206')]" ).exists() )
@@ -185,7 +205,7 @@ class IngredientControllerTest {
         ingredientRepository.save( testIngredient );
         
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/search/egg" ) )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( List.of( testIngredient ) ) ) );
     }
     
@@ -195,7 +215,7 @@ class IngredientControllerTest {
         mockMvc.perform( MockMvcRequestBuilders.post( "/api/ingredient/new" )
                         .contentType( MediaType.APPLICATION_JSON )
                         .content( objectMapper.writeValueAsString( testIngredient ) ) )
-                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( status().isOk() )
                 .andExpect( MockMvcResultMatchers.content().json( objectMapper.writeValueAsString( testIngredient ) ) );
     }
 }
