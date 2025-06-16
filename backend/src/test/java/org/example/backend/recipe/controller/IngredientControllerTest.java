@@ -54,6 +54,7 @@ class IngredientControllerTest {
     @BeforeEach
     void setUp() {
         mockServer = MockRestServiceServer.createServer( restTemplateConfig.restTemplate() );
+        mockServer.reset();
     }
     
     @Test
