@@ -21,3 +21,5 @@ jobs:
           FATSECRET_ID: ${{ secrets.FATSECRET_ID }}
           FATSECRET_SECRET: ${{ secrets.FATSECRET_SECRET }}
         run: mvn -B package --file backend/pom.xml
+      - name: Show public IP address
+        run: curl https://ipinfo.io/ip
