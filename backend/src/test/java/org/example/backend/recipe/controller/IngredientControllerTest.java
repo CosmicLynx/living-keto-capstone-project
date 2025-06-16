@@ -1,6 +1,6 @@
 package org.example.backend.recipe.controller;
 
-import com.fasterxml.jackson.databind.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.backend.recipe.model.*;
 import org.example.backend.recipe.repository.IngredientRepository;
 import org.example.backend.restclient.RestTemplateConfig;
@@ -13,16 +13,14 @@ import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.client.MockRestServiceServer;
-import org.springframework.test.web.servlet.*;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.*;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -62,6 +60,7 @@ class IngredientControllerTest {
         mockServer.reset();
     }
     
+    @Tag("fatsecret")
     @Test
     void searchNewIngredients() throws Exception {
         
@@ -94,21 +93,6 @@ class IngredientControllerTest {
                         }
                         """, MediaType.APPLICATION_JSON ) );
         
-        MvcResult result = mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/new/egg" ) )
-                .andDo( print() )
-                .andExpect( status().isOk() )
-                .andExpect( MockMvcResultMatchers.content().contentType( MediaType.APPLICATION_JSON ) )
-                .andDo( mvcResult -> System.out.println( "Response Body: " + mvcResult.getResponse().getContentAsString() ) )
-                .andReturn();
-        
-        String content = result.getResponse().getContentAsString();
-        assertNotNull( content, "Response content should not be null" );
-        assertTrue( content.contains( "foods" ), "Response should contain 'foods' key" );
-        
-        JsonNode root = objectMapper.readTree( content );
-        assertNotNull( root.get( "foods" ), "foods node should not be null" );
-        assertTrue( root.get( "foods" ).has( "food" ), "foods should have food array" );
-        
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/ingredient/new/egg" ) )
                 .andExpect( status().isOk() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.foods.food[?(@.food_id=='3092')]" ).exists() )
@@ -119,6 +103,7 @@ class IngredientControllerTest {
         
     }
     
+    @Tag("fatsecret")
     @Test
     void newIngredientDetails() throws Exception {
         mockServer.expect( requestTo( "https://platform.fatsecret.com/rest/food/v4?format=json&food_id=3092" ) )
