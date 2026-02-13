@@ -8,7 +8,6 @@ import org.springframework.http.*;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.endpoint.*;
 import org.springframework.security.oauth2.client.registration.*;
-import org.springframework.security.oauth2.client.web.*;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.util.*;
@@ -90,9 +89,12 @@ public class OAuth2TestConfig {
                                                 .accessTokenResponseClient(tokenResponseClient))
                                 .build();
 
-                DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
+                OAuth2AuthorizedClientService authorizedClientService = new InMemoryOAuth2AuthorizedClientService(
+                                clientRegistrationRepository);
+
+                AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
                                 clientRegistrationRepository,
-                                new HttpSessionOAuth2AuthorizedClientRepository()); // Korrigierter Typ
+                                authorizedClientService);
 
                 authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
