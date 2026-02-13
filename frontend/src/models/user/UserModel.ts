@@ -1,5 +1,5 @@
 export type UserModel = {
   username: string;
   id: string;
-  role: "USER" | "ADMIN";
+  role: "ROLE_USER" | "ROLE_ADMIN";
 };
