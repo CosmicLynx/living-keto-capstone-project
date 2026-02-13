@@ -45,6 +45,9 @@ jobs:
           cache: "maven"
 
       - name: Build with maven
+        env:
+          FATSECRET_ID: ${{ secrets.FATSECRET_ID }}
+          FATSECRET_SECRET: ${{ secrets.FATSECRET_SECRET }}
         run: mvn -B package --file backend/pom.xml
 
       - uses: actions/upload-artifact@v4
