@@ -24,7 +24,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 .findById( oAuth2User.getName() )
                 .orElseGet( () -> createAppUser( oAuth2User ) );
         
-        return new DefaultOAuth2User( List.of( new SimpleGrantedAuthority( userModel.role() ) ),
+        return new DefaultOAuth2User( List.of( new SimpleGrantedAuthority( "ROLE_" + userModel.role() ) ),
                 oAuth2User.getAttributes(), "sub" );
     }
     

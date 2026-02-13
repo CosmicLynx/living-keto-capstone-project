@@ -39,21 +39,44 @@ public class RecipeService {
     }
     
     public RecipeDetailModel addRecipe( RecipeDetailModelDto recipeDto ) {
-        List<String> allergens = recipeDto.ingredients().stream()
+        List<IngredientGroupModel> ingredientGroupsWithIds = recipeDto.ingredients().stream()
+                .map( group -> new IngredientGroupModel(
+                        group.name(),
+                        group.ingredients().stream()
+                                .map( ingredient -> new RecipeIngredientModel(
+                                        idService.randomId(),
+                                        ingredient.name(),
+                                        ingredient.amount(),
+                                        ingredient.unit(),
+                                        ingredient.nutritionValues(),
+                                        ingredient.allergens(),
+                                        ingredient.hint()
+                                ) )
+                                .collect( Collectors.toList() )
+                ) )
+                .toList();
+        
+        Map<String, String> uniqueAllergensMap = recipeDto.ingredients().stream()
                 .flatMap( ingredientGroup -> ingredientGroup.ingredients().stream() )
                 .map( RecipeIngredientModel::allergens )
                 .filter( Objects::nonNull )
-                .map( Arrays::toString )
-                .collect( Collectors.toList() );
+                .flatMap( Arrays::stream )
+                .filter( str -> str != null && !str.isBlank() )
+                .collect( Collectors.toMap(
+                        String::toLowerCase,
+                        allergen -> allergen,
+                        ( existing, replacement ) -> existing,
+                        LinkedHashMap::new
+                ) );
         
-        if ( allergens.isEmpty() ) {
-            allergens = null;
-        }
+        List<String> allergens = uniqueAllergensMap.isEmpty()
+                ? null
+                : new ArrayList<>( uniqueAllergensMap.values() );
         
         RecipeDetailModel recipe = new RecipeDetailModel(
                 idService.randomId(),
                 recipeDto.title(),
-                recipeDto.ingredients(),
+                ingredientGroupsWithIds,
                 recipeDto.steps(),
                 recipeDto.nutritionValues(),
                 LocalDateTime.now(),
