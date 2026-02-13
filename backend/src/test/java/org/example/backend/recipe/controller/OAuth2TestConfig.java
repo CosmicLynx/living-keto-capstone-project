@@ -8,6 +8,7 @@ import org.springframework.http.*;
 import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.endpoint.*;
 import org.springframework.security.oauth2.client.registration.*;
+import org.springframework.security.oauth2.client.web.*;
 import org.springframework.security.oauth2.core.*;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AccessTokenResponse;
 import org.springframework.util.*;
@@ -79,15 +80,8 @@ public class OAuth2TestConfig {
         }
 
         @Bean
-        public OAuth2AuthorizedClientService authorizedClientService(
-                        ClientRegistrationRepository clientRegistrationRepository) {
-                return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);
-        }
-
-        @Bean
         public OAuth2AuthorizedClientManager authorizedClientManager(
                         ClientRegistrationRepository clientRegistrationRepository,
-                        OAuth2AuthorizedClientService authorizedClientService,
                         OAuth2AccessTokenResponseClient<OAuth2ClientCredentialsGrantRequest> tokenResponseClient) {
 
                 OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder
@@ -96,9 +90,9 @@ public class OAuth2TestConfig {
                                                 .accessTokenResponseClient(tokenResponseClient))
                                 .build();
 
-                AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager = new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+                DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
                                 clientRegistrationRepository,
-                                authorizedClientService);
+                                new HttpSessionOAuth2AuthorizedClientRepository()); // Korrigierter Typ
 
                 authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 

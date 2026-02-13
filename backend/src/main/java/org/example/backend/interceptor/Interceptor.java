@@ -1,5 +1,6 @@
 package org.example.backend.interceptor;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.*;
 import org.springframework.lang.*;
@@ -13,50 +14,51 @@ import java.io.IOException;
 import java.time.Instant;
 
 @Component
+@Profile("!test")
 public class Interceptor implements ClientHttpRequestInterceptor {
     private static final String REGISTRATION_ID = "fatsecret_api";
-    
+
     private final OAuth2AuthorizedClientManager authorizedClientManager;
-    
+
     private OAuth2AccessToken accessToken;
-    
-    public Interceptor( OAuth2AuthorizedClientManager authorizedClientManager ) {
+
+    public Interceptor(OAuth2AuthorizedClientManager authorizedClientManager) {
         this.authorizedClientManager = authorizedClientManager;
     }
-    
-    private static boolean isTokenValid( @Nullable OAuth2AccessToken token ) {
+
+    private static boolean isTokenValid(@Nullable OAuth2AccessToken token) {
         return token != null && token.getExpiresAt() != null
-                && token.getExpiresAt().isAfter( Instant.now() );
+                && token.getExpiresAt().isAfter(Instant.now());
     }
-    
+
     @Override
-    public @NonNull ClientHttpResponse intercept( @NonNull HttpRequest request,
-                                                  @NonNull byte[] body,
-                                                  @NonNull ClientHttpRequestExecution execution )
+    public @NonNull ClientHttpResponse intercept(@NonNull HttpRequest request,
+            @NonNull byte[] body,
+            @NonNull ClientHttpRequestExecution execution)
             throws IOException {
         final OAuth2AccessToken accessToken = getAccessToken();
-        if ( accessToken == null ) {
-            return execution.execute( request, body );
+        if (accessToken == null) {
+            return execution.execute(request, body);
         }
-        request.getHeaders().setBearerAuth( accessToken.getTokenValue() );
-        return execution.execute( request, body );
+        request.getHeaders().setBearerAuth(accessToken.getTokenValue());
+        return execution.execute(request, body);
     }
-    
+
     private @Nullable OAuth2AccessToken getAccessToken() {
-        if ( !isTokenValid( accessToken ) )
+        if (!isTokenValid(accessToken))
             setAccessToken();
         return accessToken;
     }
-    
+
     private void setAccessToken() {
         accessToken = null;
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if ( authentication == null )
+        if (authentication == null)
             return;
         OAuth2AuthorizeRequest req = OAuth2AuthorizeRequest
-                .withClientRegistrationId( REGISTRATION_ID ).principal( authentication.getName() ).build();
-        OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize( req );
-        if ( authorizedClient == null )
+                .withClientRegistrationId(REGISTRATION_ID).principal(authentication.getName()).build();
+        OAuth2AuthorizedClient authorizedClient = authorizedClientManager.authorize(req);
+        if (authorizedClient == null)
             return;
         accessToken = authorizedClient.getAccessToken();
     }
