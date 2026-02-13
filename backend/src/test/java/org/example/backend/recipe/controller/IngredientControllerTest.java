@@ -2,6 +2,7 @@ package org.example.backend.recipe.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.example.backend.interceptor.Interceptor;
 import org.example.backend.recipe.model.*;
 import org.example.backend.recipe.repository.IngredientRepository;
 import org.example.backend.restclient.RestTemplateConfig;
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.*;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -58,6 +60,9 @@ class IngredientControllerTest {
         mockServer = MockRestServiceServer.createServer(restTemplateConfig.restTemplate());
         mockServer.reset();
     }
+
+    @MockitoBean
+    private Interceptor interceptor;
 
     @Tag("fatsecret")
     @Test

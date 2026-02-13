@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.time.Instant;
 
 @Component
-@Profile("!test")
 public class Interceptor implements ClientHttpRequestInterceptor {
     private static final String REGISTRATION_ID = "fatsecret_api";
 
