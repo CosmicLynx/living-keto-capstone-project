@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -33,9 +34,9 @@ class RecipeControllerTest {
                             "1234",
                             "testingredient",
                             1.4,
-                            UnitEnum.LITER,
+                            "LITER",
                             new NutritionValuesModel( 1, 2, 3, 4, null ),
-                            false,
+                            null,
                             ""
                     ) ) ) ),
             List.of( new StepGroupModel( "test", List.of( "step1", "step2" ) ) ),
@@ -44,12 +45,13 @@ class RecipeControllerTest {
             LocalDateTime.of( 2021, 1, 1, 0, 0 ),
             20,
             20,
-            20,
+            40,
             20,
             null,
             List.of( "" ),
             "image"
     );
+    
     RecipeModel testRecipe = new RecipeModel(
             testRecipeDetails.id(),
             testRecipeDetails.title(),
@@ -60,6 +62,19 @@ class RecipeControllerTest {
             testRecipeDetails.tags(),
             testRecipeDetails.image()
     );
+    
+    RecipeDetailModelDto testRecipeDto = new RecipeDetailModelDto(
+            testRecipeDetails.title(),
+            testRecipeDetails.ingredients(),
+            testRecipeDetails.steps(),
+            testRecipeDetails.nutritionValues(),
+            testRecipeDetails.preparationTime(),
+            testRecipeDetails.cookingTime(),
+            testRecipeDetails.defaultPortions(),
+            testRecipeDetails.tags(),
+            testRecipeDetails.image()
+    );
+    
     @Autowired
     private ObjectMapper objectMapper;
     
@@ -88,6 +103,69 @@ class RecipeControllerTest {
         
         mockMvc.perform( MockMvcRequestBuilders.get( "/api/recipe/1234" ) )
                 .andExpect( MockMvcResultMatchers.status().isNotFound() );
+        
+    }
+    
+    @Test
+    void addRecipe_addsNewRecipeSuccessfully() throws Exception {
+        
+        mockMvc.perform( MockMvcRequestBuilders.post( "/api/recipe" )
+                        .contentType( MediaType.APPLICATION_JSON )
+                        .content( objectMapper.writeValueAsString( testRecipeDto ) ) )
+                .andExpect( MockMvcResultMatchers.status().isOk() )
+                .andExpect( MockMvcResultMatchers.jsonPath( "$.id" ).isNotEmpty() )
+                .andExpect( MockMvcResultMatchers.jsonPath( "$.createdAt" ).isNotEmpty() )
+                .andExpect( MockMvcResultMatchers.jsonPath( "$.updatedAt" ).isNotEmpty() )
+                .andExpect( MockMvcResultMatchers.content().json( """
+                        {
+                            "title": "test",
+                            "ingredients": [
+                                {
+                                    "name": "testgroup",
+                                    "ingredients": [
+                                        {
+                                            "id": "1234",
+                                            "name": "testingredient",
+                                            "amount": 1.4,
+                                            "unit": "LITER",
+                                            "nutritionValues": {
+                                                "fat": 1,
+                                                "protein": 2,
+                                                "carbs": 3,
+                                                "calories": 4,
+                                                "skaldeman": null
+                                            },
+                                            "allergens": null,
+                                            "hint": ""
+                                        }
+                                    ]
+                                }
+                            ],
+                            "steps": [
+                                {
+                                    "name": "test",
+                                    "steps": [
+                                        "step1",
+                                        "step2"
+                                    ]
+                                }
+                            ],
+                            "nutritionValues": {
+                                "fat": 1,
+                                "protein": 2,
+                                "carbs": 3,
+                                "calories": 4,
+                                "skaldeman": null
+                            },
+                            "preparationTime": 20,
+                            "cookingTime": 20,
+                            "totalTime": 40,
+                            "defaultPortions": 20,
+                            "tags": [""],
+                            "allergens": null,
+                            "image": "image"
+                        }
+                        """ ) );
         
     }
 }

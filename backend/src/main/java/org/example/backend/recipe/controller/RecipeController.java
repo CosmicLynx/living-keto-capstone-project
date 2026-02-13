@@ -22,4 +22,9 @@ public class RecipeController {
     public RecipeDetailModel getRecipeById( @PathVariable String id ) throws NoSuchElementException {
         return recipeService.getRecipeById( id ).orElseThrow( () -> new NoSuchElementException( "no recipe with id " + id + " found" ) );
     }
+    
+    @PostMapping
+    public RecipeDetailModel addRecipe( @RequestBody RecipeDetailModelDto recipeDto ) {
+        return recipeService.addRecipe( recipeDto );
+    }
 }

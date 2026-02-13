@@ -1,12 +1,15 @@
 package org.example.backend.recipe.model;
 
+import com.mongodb.lang.Nullable;
+import lombok.With;
+
 import java.util.List;
 
+@With
 public record IngredientModel(
         String id,
         String name,
-        List<UnitEnum> units,
-        NutritionValuesModel nutritionValues,
-        boolean isAllergen
+        List<NutritionValuesPerUnitModel> nutritionValuesPerUnit,
+        @Nullable String[] allergens
 ) {
 }

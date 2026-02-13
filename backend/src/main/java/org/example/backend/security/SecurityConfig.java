@@ -22,8 +22,7 @@ public class SecurityConfig {
         http
                 .csrf( AbstractHttpConfigurer::disable )
                 .authorizeHttpRequests( a -> a // spezifisch --> allgemein
-//                        .requestMatchers( "/api/example" ).authenticated()
-//                        .requestMatchers( "/api/admin" ).hasAuthority( "ADMIN" )
+                        .requestMatchers( "/api/ingredient/*" ).hasRole( "ADMIN" )
                         .anyRequest().permitAll() )
                 .sessionManagement( s -> s.sessionCreationPolicy( SessionCreationPolicy.ALWAYS ) )
                 .exceptionHandling( error -> error
