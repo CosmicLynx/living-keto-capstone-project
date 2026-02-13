@@ -13,4 +13,10 @@ public class GlobalExceptionHandler {
     public ErrorMessage handleNoSuchElementException( NoSuchElementException e ) {
         return new ErrorMessage( e.getMessage() );
     }
+    
+    @ExceptionHandler(AlreadyExistsException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorMessage handleAlreadyExistsException( AlreadyExistsException e ) {
+        return new ErrorMessage( e.getMessage() );
+    }
 }
