@@ -1,1 +1,54 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+@theme {
+    --color-primary: #6a044e;
+    --color-primary-background: #7a2a55;
+    --color-primary-dark: #4a0232;
+    --color-secondary: #aa598b;
+    --color-secondary-light: #f6a5d1;
+    --color-background: #f8f4f4;
+    --color-error: #BF0D3EFF;
+    --color-error-light: #ea7070;
+    --color-warning: #ff9407;
+    --color-warning-dark: #9f4f00;
+    --color-warning-light: #ffdfa4;
+    --color-disabled: #777777;
+    --color-disabled-light: #c1ccd3;
+    --color-disabled-dark: #666666;
+    --font-Barlow: 'Barlow', sans-serif ;
+    --font-weight-thin: 100;
+    --font-weight-extralight: 200;
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+    --text-s: 16px;
+    --text-m: 18px;
+    --text-l: 22px;
+    --text-xl: 24px;
+    --text-2xl: 26px;
+}
+body {
+    @apply font-Barlow text-m;
+}
+
+h1 {
+    @apply text-2xl font-semibold;
+}
+
+h2 {
+    @apply text-xl font-semibold;
+}
+
+h3 {
+    @apply text-l font-semibold;
+}
+
+h4 {
+    @apply text-l font-medium;
+}
+
