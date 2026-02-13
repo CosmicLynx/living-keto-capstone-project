@@ -1,6 +1,5 @@
 package org.example.backend.interceptor;
 
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.client.*;
 import org.springframework.lang.*;
