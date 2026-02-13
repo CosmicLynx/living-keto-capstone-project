@@ -25,7 +25,7 @@ class RecipeServiceTest {
                             "1234",
                             "testingredient",
                             1.4,
-                            "LITER",
+                            UnitEnum.LITER,
                             new NutritionValuesModel( 1, 2, 3, 4, null ),
                             null,
                             ""
@@ -33,7 +33,7 @@ class RecipeServiceTest {
             new NutritionValuesModel( 1, 2, 3, 4, null ),
             20,
             null,
-            List.of( "" ),
+            List.of( "test" ),
             "image"
     );
     RecipeDetailModel testDetailRecipe = new RecipeDetailModel(
@@ -49,7 +49,7 @@ class RecipeServiceTest {
             20,
             4,
             null,
-            List.of( "" ),
+            testRecipe.tags(),
             "image"
     );
     
@@ -87,7 +87,7 @@ class RecipeServiceTest {
                                 "1",
                                 "ingredient1",
                                 1.0,
-                                "GRAM",
+                                UnitEnum.GRAM,
                                 new NutritionValuesModel( 0, 0, 0, 0, null ),
                                 null,
                                 null
@@ -98,7 +98,7 @@ class RecipeServiceTest {
                 5,
                 10,
                 2,
-                List.of( "tag1" ),
+                List.of( "test" ),
                 "new-image"
         );
         

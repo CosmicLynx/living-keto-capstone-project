@@ -18,11 +18,11 @@ class IngredientServiceTest {
     void searchIngredients() {
         String searchQuery = "Tomato";
         IngredientModel ingredient = new IngredientModel( "1", "Tomato", List.of(), null );
-        Mockito.when( mockIngredientRepository.findByName( searchQuery ) ).thenReturn( List.of( ingredient ) );
+        Mockito.when( mockIngredientRepository.findByNameContainingIgnoreCase( searchQuery ) ).thenReturn( List.of( ingredient ) );
         
         List<IngredientModel> result = ingredientService.searchIngredients( searchQuery );
         
-        Mockito.verify( mockIngredientRepository ).findByName( searchQuery );
+        Mockito.verify( mockIngredientRepository ).findByNameContainingIgnoreCase( searchQuery );
         assertEquals( 1, result.size() );
         assertEquals( "Tomato", result.getFirst().name() );
     }

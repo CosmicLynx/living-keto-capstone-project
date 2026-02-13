@@ -36,7 +36,7 @@ class IngredientControllerTest {
             "egg",
             List.of( new NutritionValuesPerUnitModel(
                     10,
-                    "g",
+                    UnitEnum.GRAM,
                     new NutritionValuesModel(
                             1,
                             1,
@@ -62,6 +62,7 @@ class IngredientControllerTest {
     
     @Tag("fatsecret")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void searchNewIngredients() throws Exception {
         
         mockServer.expect( requestTo( "https://platform.fatsecret.com/rest/foods/search/v1?format=json&search_expression=test" ) )
@@ -105,6 +106,7 @@ class IngredientControllerTest {
     
     @Tag("fatsecret")
     @Test
+    @WithMockUser(roles = "ADMIN")
     void newIngredientDetails() throws Exception {
         mockServer.expect( requestTo( "https://platform.fatsecret.com/rest/food/v4?format=json&food_id=3092" ) )
                 .andExpect( method( HttpMethod.GET ) )
@@ -185,6 +187,7 @@ class IngredientControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "ADMIN")
     void searchIngredients() throws Exception {
         
         ingredientRepository.save( testIngredient );
