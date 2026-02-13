@@ -10,7 +10,7 @@ export function LoginPage() {
 
   return (
     <PageWrapper>
-      {user && user.role === "ADMIN" && (
+      {user && user.role === "ROLE_ADMIN" && (
         <CustomButton label="Admin page" onClick={() => navigate("/admin")} />
       )}
     </PageWrapper>
