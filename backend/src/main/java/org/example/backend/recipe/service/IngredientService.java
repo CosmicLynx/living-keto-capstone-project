@@ -20,7 +20,7 @@ public class IngredientService {
     }
     
     public List<IngredientModel> searchIngredients( String search ) {
-        return ingredientRepository.findByName( search );
+        return ingredientRepository.findByNameContainingIgnoreCase( search );
     }
     
     public FatsecretFoodsModel searchNewIngredients( String search ) {

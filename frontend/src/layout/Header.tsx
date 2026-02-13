@@ -1,11 +1,13 @@
 import { CustomButton } from "../components/CustomButton.tsx";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserContext.ts";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { CustomNavDropdown } from "../components/CustomNavDropdown.tsx";
 
 export function Header() {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
+  const location = useLocation();
 
   function handleLogin() {
     const host =
@@ -24,19 +26,49 @@ export function Header() {
   }
 
   return (
-    <div className="border-b">
+    <div className="bg-primary-background">
       <div className="m-auto p-5 max-w-[1040px] flex justify-between items-center">
-        <div className="shrink-0 w-fit">Living Keto Capstone-Project</div>
-        <div>
-          {user ? (
+        <h1 className="shrink-0 w-fit text-white">
+          Living Keto Capstone-Projekt
+        </h1>
+        <div className="flex gap-2">
+          {location.pathname !== "/recipes" && (
             <CustomButton
-              label={user.username + " | Logout"}
-              onClick={handleLogout}
+              label="Rezepte"
+              onClick={() => navigate("/recipes")}
+              variant="secondary"
             />
-          ) : (
-            <CustomButton label="Login" onClick={handleLogin} />
           )}
-          <CustomButton label="Rezepte" onClick={() => navigate("/recipes")} />
+          {location.pathname !== "/" && (
+            <CustomButton
+              label="Startseite"
+              onClick={() => navigate("/")}
+              variant="secondary"
+            />
+          )}
+          {user ? (
+            user.role === "ROLE_ADMIN" ? (
+              <CustomNavDropdown
+                label={user.username}
+                options={[
+                  { label: "Admin", navigateTo: "/admin", admin: true },
+                  { label: "Logout", navigateTo: "/", customNav: handleLogout },
+                ]}
+              />
+            ) : (
+              <CustomButton
+                label={user.username + " | Logout"}
+                onClick={handleLogout}
+                variant="secondary"
+              />
+            )
+          ) : (
+            <CustomButton
+              label="Login"
+              onClick={handleLogin}
+              variant="secondary"
+            />
+          )}
         </div>
       </div>
     </div>

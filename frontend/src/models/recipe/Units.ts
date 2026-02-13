@@ -12,15 +12,15 @@ export type Units =
   | "MILLILITER";
 
 export const translatedUnits: { [key in Units]: string } = {
-  PIECE: "",
+  PIECE: "Stück",
   GRAM: "g",
   KILOGRAM: "kg",
   TEASPOON: "TL",
   TABLESPOON: "EL",
-  NONE: "",
   SOME: "etwas",
   PINCH: "Prise",
   PACK: "Päckchen",
   LITER: "l",
   MILLILITER: "ml",
+  NONE: "ohne",
 };

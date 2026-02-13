@@ -1,5 +1,5 @@
-import type { Units } from "./Units.ts";
 import type { NutritionValuesModel } from "./NutritionValuesModel.ts";
+import type { Units } from "./Units.ts";
 
 export type RecipeIngredientModel = {
   id: string;
@@ -7,6 +7,6 @@ export type RecipeIngredientModel = {
   amount: number;
   unit: Units;
   nutritionValues: NutritionValuesModel;
-  isAllergen?: boolean;
+  allergens: string[] | undefined;
   hint?: string | null;
 };

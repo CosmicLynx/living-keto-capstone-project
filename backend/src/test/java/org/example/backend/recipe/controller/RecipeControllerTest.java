@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -34,7 +35,7 @@ class RecipeControllerTest {
                             "1234",
                             "testingredient",
                             1.4,
-                            "LITER",
+                            UnitEnum.LITER,
                             new NutritionValuesModel( 1, 2, 3, 4, null ),
                             null,
                             ""
@@ -48,7 +49,7 @@ class RecipeControllerTest {
             40,
             20,
             null,
-            List.of( "" ),
+            List.of( "test" ),
             "image"
     );
     
@@ -107,6 +108,7 @@ class RecipeControllerTest {
     }
     
     @Test
+    @WithMockUser(roles = "ADMIN")
     void addRecipe_addsNewRecipeSuccessfully() throws Exception {
         
         mockMvc.perform( MockMvcRequestBuilders.post( "/api/recipe" )
@@ -116,6 +118,7 @@ class RecipeControllerTest {
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.id" ).isNotEmpty() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.createdAt" ).isNotEmpty() )
                 .andExpect( MockMvcResultMatchers.jsonPath( "$.updatedAt" ).isNotEmpty() )
+                .andExpect( MockMvcResultMatchers.jsonPath( "$.ingredients[0].ingredients[0].id" ).isNotEmpty() )
                 .andExpect( MockMvcResultMatchers.content().json( """
                         {
                             "title": "test",
@@ -124,7 +127,6 @@ class RecipeControllerTest {
                                     "name": "testgroup",
                                     "ingredients": [
                                         {
-                                            "id": "1234",
                                             "name": "testingredient",
                                             "amount": 1.4,
                                             "unit": "LITER",
@@ -161,7 +163,7 @@ class RecipeControllerTest {
                             "cookingTime": 20,
                             "totalTime": 40,
                             "defaultPortions": 20,
-                            "tags": [""],
+                            "tags": ["test"],
                             "allergens": null,
                             "image": "image"
                         }

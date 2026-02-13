@@ -6,5 +6,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.List;
 
 public interface IngredientRepository extends MongoRepository<IngredientModel, String> {
-    List<IngredientModel> findByName( String name );
+    List<IngredientModel> findByNameContainingIgnoreCase( String name );
 }

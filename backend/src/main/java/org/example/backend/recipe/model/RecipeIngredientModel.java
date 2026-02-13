@@ -7,7 +7,7 @@ public record RecipeIngredientModel(
         @Field("id") String id,
         String name,
         double amount,
-        String unit,
+        UnitEnum unit,
         NutritionValuesModel nutritionValues,
         @Nullable String[] allergens,
         @Nullable String hint

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import type { UserModel } from "./models/user/UserModel.ts";
 import { Route, Routes } from "react-router-dom";
 import { UserContext } from "./contexts/UserContext.ts";
-import { LoginPage } from "./pages/LoginPage.tsx";
+import { HomePage } from "./pages/HomePage.tsx";
 import { ProtectedRoute } from "./pages/ProtectedRoute.tsx";
 import { AdminPage } from "./pages/AdminPage.tsx";
 import { RecipesPage } from "./pages/RecipesPage.tsx";
@@ -26,8 +26,8 @@ export default function App() {
     <QueryClientProvider client={queryClient}>
       <UserContext.Provider value={{ user: user, setUser: setUser }}>
         <Routes>
-          <Route path="/" element={<LoginPage />} />
-          <Route element={<ProtectedRoute authorizedRole="ADMIN" />}>
+          <Route path="/" element={<HomePage />} />
+          <Route element={<ProtectedRoute authorizedRole="ROLE_ADMIN" />}>
             <Route path="/admin" element={<AdminPage />} />
           </Route>
           <Route path="/recipes" element={<RecipesPage />} />

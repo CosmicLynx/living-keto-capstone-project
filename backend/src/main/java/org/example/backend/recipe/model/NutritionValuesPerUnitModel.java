@@ -2,7 +2,7 @@ package org.example.backend.recipe.model;
 
 public record NutritionValuesPerUnitModel(
         double defaultAmount,
-        String unit,
+        UnitEnum unit,
         NutritionValuesModel nutritionValues
 ) {
 }
